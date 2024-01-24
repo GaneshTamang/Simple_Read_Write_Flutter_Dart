@@ -1,53 +1,81 @@
 // ignore_for_file: avoid_print
 
 import 'package:file_handling_examples/filing_directory.dart';
+import 'package:file_handling_examples/providing_data.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final currentHomePageContext = context;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Consumer<ProvidingData>(
+              builder: (context, providerValue, widgetCreated) {
+            return FutureBuilder(
+              future: providerValue.getData,
+              builder: ((context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return Text(snapshot.data ?? "empty");
+                }
+              }),
+            );
+          }),
           Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                File mySavedFile = File('lib/rw.txt');
-
-                String contentsInFile = await mySavedFile.readAsString();
-
-                print(contentsInFile);
-                await mySavedFile.delete();
-              },
-              child: const Text('Delete'),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await FillingDirectoryEG().deletefile();
+                  } catch (e) {
+                    if (currentHomePageContext.mounted) {
+                      ScaffoldMessenger.of(currentHomePageContext)
+                          .showSnackBar(SnackBar(
+                        content: Text(e.toString()),
+                        duration: const Duration(seconds: 2),
+                      ));
+                    }
+                  }
+                },
+                child: const Text('Delete'),
+              ),
             ),
           ),
           Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                await FillingDirectoryEG().createDirectory();
-              },
-              child: const Text('create'),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await FillingDirectoryEG().createDirectory(context);
+                  } catch (e) {
+                    if (currentHomePageContext.mounted) {
+                      ScaffoldMessenger.of(currentHomePageContext)
+                          .showSnackBar(SnackBar(
+                        content: Text(e.toString()),
+                        duration: const Duration(seconds: 2),
+                      ));
+                    }
+                  }
+                },
+                child: const Text('create'),
+              ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  checkFileAndCreate(String filePath) {
-    //create file object
-    File checkfile = File(filePath);
-    if (checkfile.existsSync()) {
-      print('is available');
-      return checkfile;
-    } else {
-      print('nosuch file in directory');
-    }
   }
 }

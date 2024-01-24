@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class ProvidingData with ChangeNotifier {
@@ -11,4 +13,18 @@ class ProvidingData with ChangeNotifier {
     _counter++;
     notifyListeners();
   }
+
+  String _data = "";
+
+  Future<String> get getData async {
+    try {
+      File readingfile = File('lib/rw.txt');
+      _data = await readingfile.readAsString();
+      return _data;
+    } catch (e) {
+      return 'error $e';
+    }
+  }
+
+  // setdata() {}
 }
