@@ -7,7 +7,7 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
-        create: (_) => ProvidingData(),
+        create: (_) => ProviderDataForApp(),
       ),
     ],
     child: const FileHandlingApp(),
@@ -24,29 +24,3 @@ class FileHandlingApp extends StatelessWidget {
     );
   }
 }
-//better to put in consumer for easy use
-
-// Consumer<ProvidingData>(
-//         builder: (context, dataProvidedToconsume, child) {
-//           return Column(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               // Text('${context.watch<ProvidingData>().getcounter}'),
-//               Text('${dataProvidedToconsume.getcounter}'),
-//               Card(
-//                 child: Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: InkWell(
-//                     onTap: () {
-//                       print('pressed');
-//                       // context.read<ProvidingData>().setcounter();
-//                       dataProvidedToconsume.setcounter();
-//                     },
-//                     child: Text("Increase counter"),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           );
-//         },
-//       ),
