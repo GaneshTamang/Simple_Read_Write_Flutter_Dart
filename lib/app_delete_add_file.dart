@@ -1,17 +1,17 @@
-import 'dart:async';
+// ignore_for_file: avoid_print
 
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class AppReadWrite {
+class AppDeleteAddFile {
   //  To chekc directory folder Exists?
   Future<bool> checkDirectoryExistOnDevice(String directoryTocheck) async {
     Directory fileDirectory = Directory(directoryTocheck);
     if (await fileDirectory.exists() == true) {
       return true;
     } else {
-      debugPrint('No folder named $directoryTocheck');
+      debugPrint('No folder/file named $directoryTocheck');
       return false;
     }
   }
@@ -30,22 +30,39 @@ class AppReadWrite {
     }
   }
 
+  Future<bool> checkFileExistsonPath(String filePath) async {
+    String filePathToCheck = filePath;
+    File checkFile = File(filePathToCheck);
+    bool fileExists = await checkFile.exists();
+
+    if (!fileExists) {
+      print('fileDidnt exist on path at $filePathToCheck');
+      return false;
+    } else {
+      print('file found on path: $filePathToCheck');
+      return true;
+    }
+  }
+
   Future<void> createFileOnSpecificDirectory(
       {required String whereToCreate,
       required String fileNAme,
       required String fileExtension}) async {
     //check Folder exists?
-    await createFolderWithDirectory(whereToCreate);
+    String direcTory = whereToCreate;
     String fileNAmeToCreate = fileNAme;
     String extension = fileExtension;
-    bool checkFileDirectory = await checkDirectoryExistOnDevice(
+    bool checkFileDirectory = await checkFileExistsonPath(
         "$whereToCreate/$fileNAmeToCreate.$extension");
 
     if (!checkFileDirectory) {
       createFolderWithDirectory(whereToCreate);
-      File creatingFile = File('$whereToCreate/$fileNAmeToCreate.$extension');
-
-      await creatingFile.create(recursive: true);
+      File creatingFile = File('$direcTory/$fileNAmeToCreate.$extension');
+      await creatingFile.writeAsString(
+          "Helllooooooooooooooooooooooooo Worrlllllllllllllllld");
+      await creatingFile.create(
+        recursive: true,
+      );
       debugPrint('created at Path: ${creatingFile.path}');
     } else {
       debugPrint("file found : $fileNAmeToCreate/$fileNAmeToCreate.$extension");
