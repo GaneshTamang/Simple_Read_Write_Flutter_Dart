@@ -1,17 +1,11 @@
 # file_handling_examples
 
-#here it is edited by vs code 
+# this is  simple file handling concept using provider and dart io 
+ in this project i have made simple app for desktop to do directly write in readme file dart.io and provider package
+# write directly to in readme file using  texfield 
 
-
+![writing in file ](<direct text.gif>)
+# add delete file
+![add delete](<add and delete .gif>)
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
