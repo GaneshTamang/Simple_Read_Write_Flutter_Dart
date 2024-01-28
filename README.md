@@ -7,5 +7,5 @@
 ![writing in file ](<direct text.gif>)
 # add delete file
 ![add delete](<add and delete .gif>)
-## Getting Started
+
 
