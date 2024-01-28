@@ -4,12 +4,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class AppDeleteAddFile with ChangeNotifier {
+class AppReadWriteDeleteAddFile with ChangeNotifier {
   String currrentPath = 'lib/photos/readme.txt';
   // File? _fileToRW;
   late String _fileContent = "No file Exists";
 
-  AppDeleteAddFile() {
+  AppReadWriteDeleteAddFile() {
     readFromFile(currrentPath);
   }
 
@@ -28,7 +28,7 @@ class AppDeleteAddFile with ChangeNotifier {
     }
   }
 
-//check directory and create
+//! check directory and create
   Future<void> createFolderWithDirectory(String photosFolder) async {
     bool checkFolder = await checkDirectoryExistOnDevice(photosFolder);
     //! here check T/F ? If T do:else Do this;
@@ -42,6 +42,7 @@ class AppDeleteAddFile with ChangeNotifier {
     }
   }
 
+// ! checking file exixts on path
   Future<bool> checkFileExistsonPath(String filePath) async {
     String filePathToCheck = filePath;
     File checkFile = File(filePathToCheck);
@@ -56,6 +57,7 @@ class AppDeleteAddFile with ChangeNotifier {
     }
   }
 
+// ! creating if file not present
   Future<void> createFileOnSpecificDirectory(
       {required String whereToCreate,
       required String fileNAme,
@@ -71,8 +73,7 @@ class AppDeleteAddFile with ChangeNotifier {
       await createFolderWithDirectory(whereToCreate);
 
       File creatingFile = File('$direcTory/$fileNAmeToCreate.$extension');
-      await creatingFile.writeAsString(
-          "Helllooooooooooooooooooooooooo Worrlllllllllllllllld");
+      await creatingFile.writeAsString("file created with empty");
       await creatingFile.create(
         recursive: true,
       );
@@ -84,7 +85,7 @@ class AppDeleteAddFile with ChangeNotifier {
     }
   }
 
-//since file cannot be detected from directory method so   checking specific file and deleting
+//! since file cannot be detected from directory method so checking specific file and deleting
   Future<void> deleteSpecificFile(
       {required String whereToDelete,
       required String fileNAme,
@@ -105,6 +106,7 @@ class AppDeleteAddFile with ChangeNotifier {
     }
   }
 
+// ! deleting directory if present
   Future<void> deletFolderFromDirectory(String directoryFileToDelete) async {
     bool checkFileExist =
         await checkDirectoryExistOnDevice(directoryFileToDelete);
@@ -120,6 +122,8 @@ class AppDeleteAddFile with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // !reading content of file
 
   Future<void> readFromFile(String filePathToRead) async {
     File toReadFile = File(filePathToRead);
@@ -142,5 +146,11 @@ class AppDeleteAddFile with ChangeNotifier {
     }
   }
 
-  writeInFile(String directorTowirte, String whatToWrite) {}
+  writeInFile(String directoryTowirte, String whatToWrite) async {
+    File updatingFile = File(directoryTowirte);
+
+    await updatingFile.writeAsString(whatToWrite, mode: FileMode.write);
+    await readFromFile(directoryTowirte);
+    notifyListeners();
+  }
 }

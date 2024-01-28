@@ -10,7 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AppDeleteAddFile(),
+          create: (_) => AppReadWriteDeleteAddFile(),
         ),
         // ChangeNotifierProvider(
         //   create: (_) => AppFileREadWrite(),

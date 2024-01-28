@@ -8,20 +8,37 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // AppDeleteAddFile fileActions = AppDeleteAddFile();
+    String? typedText;
+    TextEditingController controllerForTextField = TextEditingController();
+
     return Scaffold(
       body: Center(
-        child: Consumer<AppDeleteAddFile>(
+        child: Consumer<AppReadWriteDeleteAddFile>(
           builder: (context, providerData, child) {
+            controllerForTextField =
+                TextEditingController(text: providerData.fileCurrentContents);
+            //! putting  textfield cursor at the last of the  String
+            controllerForTextField.selection = TextSelection.fromPosition(
+                TextPosition(offset: controllerForTextField.text.length));
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(providerData.fileCurrentContents),
+                TextField(
+                  controller: controllerForTextField,
+                  onChanged: (typeValue) {
+                    typedText = typeValue;
+
+                    context
+                        .read<AppReadWriteDeleteAddFile>()
+                        .writeInFile('lib/photos/readme.txt', typedText!);
+                  },
+                ),
                 ElevatedButton(
                     onPressed: () async {
-                      // AppFileREadWrite fileForReading = AppFileREadWrite();
-                      // await providerData
-                      //     .readFromSpecifcFile('lib/photos/readme.txt');
+                      context
+                          .read<AppReadWriteDeleteAddFile>()
+                          .writeInFile('lib/photos/readme.txt', typedText!);
                     },
                     child: const Text('FileRW')),
                 Column(
@@ -29,7 +46,7 @@ class HomePage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         await context
-                            .read<AppDeleteAddFile>()
+                            .read<AppReadWriteDeleteAddFile>()
                             .createFolderWithDirectory('lib/photos');
                       },
                       child: const Text('press to crete Folder'),
@@ -37,7 +54,7 @@ class HomePage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         await context
-                            .read<AppDeleteAddFile>()
+                            .read<AppReadWriteDeleteAddFile>()
                             .createFileOnSpecificDirectory(
                                 whereToCreate: 'lib/photos',
                                 fileNAme: 'readme',
@@ -48,7 +65,7 @@ class HomePage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         await context
-                            .read<AppDeleteAddFile>()
+                            .read<AppReadWriteDeleteAddFile>()
                             .deleteSpecificFile(
                                 whereToDelete: 'lib/photos',
                                 fileNAme: 'readme',
@@ -59,7 +76,7 @@ class HomePage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         await context
-                            .read<AppDeleteAddFile>()
+                            .read<AppReadWriteDeleteAddFile>()
                             .deletFolderFromDirectory('lib/photos');
                       },
                       child: const Text('delete folder'),
