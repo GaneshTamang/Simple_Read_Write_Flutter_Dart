@@ -1,6 +1,7 @@
-import 'package:file_handling_examples/app_file_read_write.dart';
+import 'package:file_handling_examples/app_delete_add_file.dart';
+// import 'package:file_handling_examples/app_file_read_write.dart';
 import 'package:file_handling_examples/homepage.dart';
-import 'package:file_handling_examples/providers.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,11 +10,11 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ProviderDataForApp(),
+          create: (_) => AppDeleteAddFile(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => AppFileREadWrite(),
-        ),
+        // ChangeNotifierProvider(
+        //   create: (_) => AppFileREadWrite(),
+        // ),
       ],
       child: const FileHandlingApp(),
     ),

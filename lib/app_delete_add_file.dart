@@ -4,7 +4,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class AppDeleteAddFile {
+class AppDeleteAddFile with ChangeNotifier {
+  String currrentPath = 'lib/photos/readme.txt';
+  // File? _fileToRW;
+  late String _fileContent = "No file Exists";
+
+  AppDeleteAddFile() {
+    readFromFile(currrentPath);
+  }
+
+// getter
+
+  String get fileCurrentContents => _fileContent;
+
   //  To chekc directory folder Exists?
   Future<bool> checkDirectoryExistOnDevice(String directoryTocheck) async {
     Directory fileDirectory = Directory(directoryTocheck);
@@ -56,7 +68,8 @@ class AppDeleteAddFile {
         "$whereToCreate/$fileNAmeToCreate.$extension");
 
     if (!checkFileDirectory) {
-      createFolderWithDirectory(whereToCreate);
+      await createFolderWithDirectory(whereToCreate);
+
       File creatingFile = File('$direcTory/$fileNAmeToCreate.$extension');
       await creatingFile.writeAsString(
           "Helllooooooooooooooooooooooooo Worrlllllllllllllllld");
@@ -64,6 +77,8 @@ class AppDeleteAddFile {
         recursive: true,
       );
       debugPrint('created at Path: ${creatingFile.path}');
+      await readFromFile(currrentPath);
+      notifyListeners();
     } else {
       debugPrint("file found : $fileNAmeToCreate/$fileNAmeToCreate.$extension");
     }
@@ -79,10 +94,14 @@ class AppDeleteAddFile {
     bool fileFound = await fileToDelete.exists();
     if (!fileFound) {
       debugPrint("No file Found  of Such name  : $fileNAme.$fileExtension");
+      _fileContent = "no file found ";
+      notifyListeners();
     } else {
       debugPrint(
           "File deleted on path :$whereToDelete $fileNAme.$fileExtension");
       fileToDelete.delete(recursive: true);
+      _fileContent = "deleted File";
+      notifyListeners();
     }
   }
 
@@ -92,9 +111,34 @@ class AppDeleteAddFile {
     if (!checkFileExist) {
       debugPrint(
           "No file Found  at :$directoryFileToDelete delete FileDoesntExists");
+      _fileContent = "no File to Delete";
+      notifyListeners();
     } else {
       File fileToDelete = File(directoryFileToDelete);
       await fileToDelete.delete(recursive: true);
+      _fileContent = "File Deleted";
+      notifyListeners();
+    }
+  }
+
+  Future<void> readFromFile(String filePathToRead) async {
+    File toReadFile = File(filePathToRead);
+
+    bool containsFile = await checkFileExistsonPath(filePathToRead);
+
+    //if false
+    if (containsFile == true)
+    // if true
+    {
+      _fileContent = await toReadFile
+          .readAsString(); // Put the whole file in a single string.
+      String content = await toReadFile.readAsString();
+      _fileContent = content;
+
+      notifyListeners();
+    } else {
+      _fileContent = "no File To read";
+      notifyListeners();
     }
   }
 
